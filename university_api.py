@@ -21,13 +21,13 @@ def fetch_universities(name: str = "", country: str = "") -> list[dict]:
         response = requests.get(API_URL, params=params, timeout=12)
         response.raise_for_status()
         data = response.json()
-    except requests.RequestException as error:
-        raise UniversityAPIError(
-            "The live university data service could not be reached. Please try again."
-        ) from error
     except ValueError as error:
         raise UniversityAPIError(
             "The university data service returned an unreadable response."
+        ) from error
+    except requests.RequestException as error:
+        raise UniversityAPIError(
+            "The live university data service could not be reached. Please try again."
         ) from error
 
     if not isinstance(data, list) or any(not isinstance(item, dict) for item in data):

@@ -52,6 +52,12 @@ def _api_error(error: UniversityAPIError):
     return jsonify(success=False, message=str(error)), 502
 
 
+def _csv_values(value):
+    if not isinstance(value, list):
+        return ""
+    return ", ".join(item for item in value if isinstance(item, str) and item)
+
+
 @app.get("/")
 def home():
     return render_template("index.html", countries=COUNTRIES)
@@ -124,8 +130,8 @@ def export():
                 [
                     university.get("name", ""),
                     university.get("country", ""),
-                    ", ".join(university.get("web_pages", [])),
-                    ", ".join(university.get("domains", [])),
+                    _csv_values(university.get("web_pages")),
+                    _csv_values(university.get("domains")),
                 ]
             )
         content = "\ufeff" + output.getvalue()

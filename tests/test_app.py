@@ -2,6 +2,7 @@ import unittest
 from unittest.mock import Mock, patch
 
 from requests import Timeout
+from requests.exceptions import JSONDecodeError
 
 from app import app
 from university_api import UniversityAPIError, fetch_universities
@@ -78,6 +79,22 @@ class UniversityAppTests(unittest.TestCase):
         self.assertIn(b"utoronto.ca", response.data)
         self.assertIn("attachment", response.headers["Content-Disposition"])
 
+    @patch(
+        "app.fetch_universities",
+        return_value=[{**SAMPLE_UNIVERSITY, "web_pages": None, "domains": "invalid"}],
+    )
+    def test_csv_export_handles_missing_or_malformed_optional_fields(self, _fetch):
+        response = self.client.get("/api/export?country=Canada&type=csv")
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b"University of Toronto", response.data)
+
+    @patch("app.fetch_universities", return_value=[SAMPLE_UNIVERSITY])
+    def test_json_export_returns_json_attachment(self, _fetch):
+        response = self.client.get("/api/export?country=Canada&type=json")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json[0]["name"], "University of Toronto")
+        self.assertIn("universities.json", response.headers["Content-Disposition"])
+
     @patch("university_api.requests.get")
     def test_api_client_sends_search_parameters_and_timeout(self, get):
         response = Mock()
@@ -95,6 +112,14 @@ class UniversityAppTests(unittest.TestCase):
     @patch("university_api.requests.get", side_effect=Timeout)
     def test_api_client_reports_network_failures(self, _get):
         with self.assertRaisesRegex(UniversityAPIError, "could not be reached"):
+            fetch_universities(country="Canada")
+
+    @patch("university_api.requests.get")
+    def test_api_client_reports_invalid_json_response(self, get):
+        response = Mock()
+        response.json.side_effect = JSONDecodeError("invalid JSON", "", 0)
+        get.return_value = response
+        with self.assertRaisesRegex(UniversityAPIError, "unreadable response"):
             fetch_universities(country="Canada")
 
 
