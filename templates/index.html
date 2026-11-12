@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#101815">
+    <meta name="description" content="Search, compare, and explore universities around the world with live data.">
+    <title>UniFinder — Your next chapter starts here</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header class="site-header">
+        <a class="brand" href="/" aria-label="UniFinder home">
+            <span class="brand-mark" aria-hidden="true">u.</span>
+            <span>uni<span class="brand-light">finder</span></span>
+        </a>
+        <nav class="main-nav" aria-label="Main navigation">
+            <a href="#discover">Discover</a>
+            <a href="#compare">Compare</a>
+            <a href="#about">About</a>
+        </nav>
+        <a class="header-cta" href="#discover">Find your uni <span aria-hidden="true">↗</span></a>
+    </header>
+
+    <main>
+        <section class="hero" id="about">
+            <div class="hero-copy">
+                <div class="eyebrow"><span class="live-dot"></span> A WORLD OF POSSIBILITIES</div>
+                <h1>Your next chapter<br>starts <span>somewhere.</span></h1>
+                <p class="hero-description">Big dreams deserve a bigger search. Explore real universities around the world and find the place that feels like your future.</p>
+                <a class="primary-button" href="#discover">Explore universities <span aria-hidden="true">↓</span></a>
+                <div class="hero-proof">
+                    <span class="proof-icons" aria-hidden="true"><i>✳</i><i>✦</i><i>↗</i></span>
+                    <span>One search. <strong>Every possibility.</strong></span>
+                </div>
+            </div>
+            <div class="hero-art" aria-label="Illustration of the world and a university graduate">
+                <div class="art-orbit orbit-outer"></div>
+                <div class="art-orbit orbit-inner"></div>
+                <div class="world">
+                    <span class="world-line line-one"></span>
+                    <span class="world-line line-two"></span>
+                    <span class="world-land land-one"></span>
+                    <span class="world-land land-two"></span>
+                    <span class="world-land land-three"></span>
+                    <span class="world-pin pin-one">✦</span>
+                    <span class="world-pin pin-two">✦</span>
+                    <span class="world-pin pin-three">✦</span>
+                </div>
+                <div class="art-note note-top"><span>✦</span> YOUR WORLD, WIDE OPEN</div>
+                <div class="art-note note-bottom"><span class="note-spark">↗</span><span><strong>Find your fit.</strong><small>It's out there.</small></span></div>
+                <span class="art-star star-one">✳</span>
+                <span class="art-star star-two">✦</span>
+            </div>
+            <div class="hero-bottom">
+                <span>MADE FOR THE CURIOUS</span>
+                <span class="bottom-rule"></span>
+                <span>SEARCH WITH POSSIBILITY</span>
+            </div>
+        </section>
+
+        <section class="discover section-wrap" id="discover">
+            <div class="section-heading">
+                <div>
+                    <div class="eyebrow dark-eyebrow">YOUR WORLDWIDE SHORTLIST</div>
+                    <h2>Find your <span>somewhere.</span></h2>
+                </div>
+                <p>Start with a name, a country, or just a feeling. We'll find the real universities to get you going.</p>
+            </div>
+
+            <form class="search-panel" id="searchForm">
+                <label class="field">
+                    <span>UNIVERSITY NAME <span class="optional">OPTIONAL</span></span>
+                    <span class="field-control"><span class="field-icon" aria-hidden="true">⌕</span>
+                        <input id="universityName" type="search" maxlength="100" placeholder="Try Oxford, MIT, or Toronto">
+                    </span>
+                </label>
+                <label class="field">
+                    <span>COUNTRY <span class="optional">OPTIONAL</span></span>
+                    <span class="field-control"><span class="field-icon pin-icon" aria-hidden="true">⌖</span>
+                        <select id="countrySelect">
+                            <option value="">Anywhere in the world</option>
+                            {% for country in countries %}
+                            <option value="{{ country }}">{{ country }}</option>
+                            {% endfor %}
+                        </select>
+                    </span>
+                </label>
+                <button class="search-button" type="submit">Search universities <span aria-hidden="true">↗</span></button>
+            </form>
+
+            <div class="results" aria-live="polite">
+                <div class="results-header">
+                    <div>
+                        <div class="eyebrow dark-eyebrow">THE POSSIBILITIES</div>
+                        <h3 id="resultsTitle">A good place to start.</h3>
+                        <p id="resultMessage">Search by name, country, or both to see live university results.</p>
+                    </div>
+                    <div class="export-actions" id="exportActions" hidden>
+                        <button class="export-button" type="button" data-export="csv">↓ CSV</button>
+                        <button class="export-button" type="button" data-export="json">↓ JSON</button>
+                    </div>
+                </div>
+                <div class="status-message" id="statusMessage" role="status" hidden></div>
+                <div class="university-grid" id="universityResults"></div>
+            </div>
+        </section>
+
+        <section class="compare section-wrap" id="compare">
+            <div class="compare-copy">
+                <div class="eyebrow">A LITTLE PERSPECTIVE</div>
+                <h2>Put the world<br>side by <span>side.</span></h2>
+                <p>Curious where your options are? Compare live university counts in a few of your favourite countries.</p>
+                <div class="compare-stamp"><span>✳</span> REAL-TIME COUNTRY COMPARISON</div>
+            </div>
+            <div class="compare-card">
+                <div class="compare-card-head">
+                    <div><span class="compare-number">01 — 04</span><h3>Pick your places.</h3></div>
+                    <span class="compare-globe" aria-hidden="true">◎</span>
+                </div>
+                <div class="compare-selects">
+                    {% for i in range(1, 5) %}
+                    <label class="compare-field">
+                        <span class="compare-index">0{{ i }}</span>
+                        <select class="compare-country" aria-label="Country {{ i }}">
+                            <option value="">Choose a country</option>
+                            {% for country in countries %}
+                            <option value="{{ country }}">{{ country }}</option>
+                            {% endfor %}
+                        </select>
+                        <span class="select-arrow" aria-hidden="true">⌄</span>
+                    </label>
+                    {% endfor %}
+                </div>
+                <button class="compare-button" id="compareButton" type="button">Compare countries <span aria-hidden="true">↗</span></button>
+                <div class="comparison-results" id="comparisonResults" aria-live="polite"></div>
+            </div>
+        </section>
+
+        <section class="closing section-wrap">
+            <span class="closing-spark" aria-hidden="true">✳</span>
+            <div><div class="eyebrow dark-eyebrow">THERE'S A PLACE FOR YOU</div><h2>Start with a <span>curiosity.</span></h2></div>
+            <a href="#discover" class="closing-link">Find your next step <span aria-hidden="true">↑</span></a>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <a class="brand footer-brand" href="/"><span class="brand-mark" aria-hidden="true">u.</span><span>uni<span class="brand-light">finder</span></span></a>
+        <p>Live university data, powered by the open Hipolabs Universities API.</p>
+        <span>MADE FOR WHAT'S NEXT&nbsp; ✳</span>
+    </footer>
+    <script src="{{ url_for('static', filename='app.js') }}" defer></script>
+</body>
+</html>
