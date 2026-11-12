@@ -205,6 +205,13 @@ http://127.0.0.1:5000
 ```
 
 🎉 **UniFinder is now running locally!**
+## OUTPUT
+<img width="1254" height="595" alt="image" src="https://github.com/user-attachments/assets/96c2da92-e916-46f9-ba7e-fdb9dad7e004" />
+
+<img width="1270" height="580" alt="image" src="https://github.com/user-attachments/assets/b429eb05-dd7f-49e1-afed-715b1c8f716a" />
+
+<img width="1256" height="579" alt="image" src="https://github.com/user-attachments/assets/0706e843-5bb2-4fee-be46-ecac666cd2a2" />
+
 
 ## 📡 API Documentation
 
