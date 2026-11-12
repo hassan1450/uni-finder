@@ -2,7 +2,7 @@
 
 UniFinder is a small Python and Flask website for discovering universities around the world. Search by institution name, browse by country, compare live university counts in up to four countries, and download search results as CSV or JSON.
 
-University information is fetched in real time by Python's `requests` library from the free, open [Hipolabs Universities API](https://github.com/Hipo/university-domains-list). No API key is required. Search results are not saved or replaced with sample data; if the API is unavailable, the website tells you and you can try again.
+University information is fetched in real time by Python's `requests` library from the open [Hipolabs university dataset](https://github.com/Hipo/university-domains-list). The app tries the original API endpoint first and falls back to the maintained GitHub mirror if the service is unavailable, so the site keeps working even when one source is down. Search results are not saved or replaced with sample data.
 
 ## Features
 
