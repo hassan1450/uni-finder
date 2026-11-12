@@ -11,6 +11,45 @@ const comparisonResults = document.querySelector("#comparisonResults");
 
 let lastSearch = null;
 
+const revealTargets = document.querySelectorAll(
+    ".hero-copy, .hero-art, .section-wrap, .search-panel, .results, .compare-card, .compare-copy, .closing, .site-header, .site-footer"
+);
+
+revealTargets.forEach((element) => {
+    element.classList.add("reveal-item");
+});
+
+const observer = new IntersectionObserver(
+    (entries) => {
+        entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add("is-visible");
+            }
+        });
+    },
+    { threshold: 0.12 }
+);
+
+revealTargets.forEach((element) => observer.observe(element));
+
+const hero = document.querySelector(".hero");
+if (hero) {
+    hero.addEventListener("pointermove", (event) => {
+        const rect = hero.getBoundingClientRect();
+        const x = ((event.clientX - rect.left) / rect.width - 0.5) * 18;
+        const y = ((event.clientY - rect.top) / rect.height - 0.5) * 18;
+        const art = hero.querySelector(".hero-art");
+        if (art) {
+            art.style.transform = `translate(${x * 1.3}px, ${y * 1.3}px)`;
+        }
+    });
+
+    hero.addEventListener("pointerleave", () => {
+        const art = hero.querySelector(".hero-art");
+        if (art) art.style.transform = "";
+    });
+}
+
 function setStatus(message = "", isError = false) {
     statusMessage.textContent = message;
     statusMessage.hidden = !message;
